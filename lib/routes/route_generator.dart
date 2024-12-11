@@ -11,8 +11,8 @@ class RouteGenerator extends StatelessWidget {
       initialRoute: '/',
       debugShowCheckedModeBanner: false,
       routes: {
-        '/': (context) => const LoginScreen(),
-        '/signup': (context) => const SignupScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/signup': (context) => const SignUpScreen(),
       },
     );
   }
