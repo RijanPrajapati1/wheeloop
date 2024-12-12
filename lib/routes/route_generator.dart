@@ -13,16 +13,12 @@ class RouteGenerator extends StatelessWidget {
     return MaterialApp(
       initialRoute: '/',
       debugShowCheckedModeBanner: false,
-
-      routes: {'/': (context) => const SplashScreen()},
-
       routes: {
         '/': (context) => const SplashScreen(),
         '/login': (context) => const LoginScreen(),
         '/signup': (context) => const SignUpScreen(),
         '/dashboard': (context) => const DashboardScreen(),
       },
-
     );
   }
 }
