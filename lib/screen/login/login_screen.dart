@@ -11,6 +11,10 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _obscureTextPassword = true;
   bool _rememberMe = false;
 
+  // Controllers to retrieve text field values
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,6 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 30),
               TextField(
+                controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   labelText: "Email",
@@ -71,6 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 20),
               TextField(
+                controller: _passwordController,
                 obscureText: _obscureTextPassword,
                 decoration: InputDecoration(
                   labelText: "Password",
@@ -123,7 +129,20 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () {
-                  // Add login logic here
+                  // Dummy credentials check
+                  if (_emailController.text == "admin@123" &&
+                      _passwordController.text == "admin123") {
+                    // If credentials are correct, proceed (you can navigate to the next screen)
+                    Navigator.pushReplacementNamed(context, '/dashboard');
+                  } else {
+                    // If credentials are incorrect, show error message
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Invalid email or password!"),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.deepPurple,
