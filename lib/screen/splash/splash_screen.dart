@@ -23,16 +23,17 @@ class _SplashScreenState extends State<SplashScreen>
     );
 
     // Initialize the animation
-    _animation = Tween<Offset>(
-      begin: const Offset(0, 1), // Start off the screen at the bottom
-      end: Offset.zero, // End at the center
-    ).animate(CurvedAnimation(
+    _animation = Tween<Offset>(begin: const Offset(0, 1), end: Offset.zero)
+        .animate(CurvedAnimation(
       parent: _controller,
       curve: Curves.easeOut,
     ));
 
-    // Start the animation after initializing
-    _controller.forward();
+    // Start the animation and navigate after the animation completes
+    _controller.forward().then((_) {
+      // Navigate to the Onboarding screen after the animation finishes
+      Navigator.pushReplacementNamed(context, '/onboarding');
+    });
   }
 
   @override
@@ -105,45 +106,10 @@ class _SplashScreenState extends State<SplashScreen>
                   ),
                 ),
                 const Spacer(),
-                // Button
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          Colors.white, // White button for high contrast
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 18),
-                      minimumSize:
-                          const Size(double.infinity, 50), // Full width
-                      shadowColor: Colors.black
-                          .withOpacity(0.3), // Add shadow for emphasis
-                      elevation: 5, // Add elevation to make it stand out more
-                    ),
-                    onPressed: () {
-                      // Navigate to another screen or perform action
-                      Navigator.pushReplacementNamed(context, '/login');
-                    },
-                    child: const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'Get Started',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Color(
-                                0xFF4A148C), // Deep purple text to match theme
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Icon(Icons.arrow_forward,
-                            color: Color(0xFF4A148C)), // Add arrow icon
-                      ],
-                    ),
-                  ),
+                // Loading indicator
+                const CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                      Color.fromARGB(255, 252, 252, 252)),
                 ),
                 const SizedBox(height: 40),
               ],
