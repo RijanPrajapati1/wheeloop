@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wheeloop/screen/dashboard_screen/bottom_navigation_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -12,10 +13,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text('Dashboard')),
-        backgroundColor: Colors.deepPurple,
+        title: const Text('Dashboard'),
       ),
-      body: const SafeArea(child: Center(child: Text('Iam a dashboard'))),
+      body: const SafeArea(
+        child: BottomNavigationScreen(),
+      ),
     );
   }
 }
