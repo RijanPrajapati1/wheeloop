@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+
 import 'package:wheeloop/screen/car_screen/brand_screen.dart';
 import 'package:wheeloop/screen/car_screen/car_screen.dart';
+
+
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -83,6 +87,13 @@ class HomeScreen extends StatelessWidget {
 
             const SizedBox(height: 10),
             const CarScreen(),
+
+    return const Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            Text('iam rijan'),
+
           ],
         ),
       ),
