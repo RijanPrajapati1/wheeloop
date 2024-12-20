@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-
 import 'package:wheeloop/screen/car_screen/brand_screen.dart';
 import 'package:wheeloop/screen/car_screen/car_screen.dart';
-
-
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -34,7 +30,9 @@ class HomeScreen extends StatelessWidget {
                       Text(
                         "Bhaktapur, Nepal",
                         style: TextStyle(
-                            fontSize: 16, fontFamily: 'Montserrat Bold'),
+                          fontSize: 16,
+                          fontFamily: 'Montserrat Bold',
+                        ),
                       ),
                     ],
                   ),
@@ -59,7 +57,7 @@ class HomeScreen extends StatelessWidget {
                         prefixIcon: const Icon(Icons.search),
                         hintText: "Search Your Favorite Vehicle",
                         filled: true,
-                        fillColor: Colors.grey[200],
+                        fillColor: Colors.grey[120],
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                           borderSide: BorderSide.none,
@@ -77,9 +75,7 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             // Top Brands Section
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-            ),
+
             const SizedBox(height: 10),
             const BrandScreen(),
             const SizedBox(height: 20),
@@ -87,13 +83,6 @@ class HomeScreen extends StatelessWidget {
 
             const SizedBox(height: 10),
             const CarScreen(),
-
-    return const Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            Text('iam rijan'),
-
           ],
         ),
       ),
