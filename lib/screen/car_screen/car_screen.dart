@@ -56,7 +56,7 @@ class _CarScreenState extends State<CarScreen> {
               children: [
                 Text(
                   "All Cars",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 16, fontFamily: 'Montserrat Bold'),
                 ),
                 Text(
                   "View All",
@@ -83,7 +83,7 @@ class _CarScreenState extends State<CarScreen> {
                       color: Colors.white,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
+                          color: Colors.black.withOpacity(0.2),
                           blurRadius: 10,
                           offset: const Offset(0, 4),
                         ),
@@ -152,7 +152,7 @@ class _CarScreenState extends State<CarScreen> {
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: Text(
               "Best-Selling Car",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 16, fontFamily: 'Montserrat Bold'),
             ),
           ),
           const SizedBox(height: 10),
@@ -165,7 +165,7 @@ class _CarScreenState extends State<CarScreen> {
                 color: Colors.white,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withOpacity(0.2),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),

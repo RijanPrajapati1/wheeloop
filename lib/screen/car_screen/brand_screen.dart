@@ -20,7 +20,7 @@ class _BrandScreenState extends State<BrandScreen> {
             children: [
               Text(
                 "Top Brands",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 16, fontFamily: 'Montserrat Bold'),
               ),
               Text(
                 "View All",
@@ -63,11 +63,11 @@ class _BrandIconState extends State<BrandIcon> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 18),
       child: Column(
         children: [
           CircleAvatar(
-            radius: 35,
+            radius: 31,
             backgroundImage: AssetImage(widget.asset),
             backgroundColor: Colors.white,
           ),
