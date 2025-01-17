@@ -1,22 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wheeloop/features/auth/presentation/view_model/login/login_screen_cubit.dart';
+import 'package:wheeloop/features/auth/presentation/view_model/login/login_state.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  bool _obscureTextPassword = true;
-  bool _rememberMe = false;
-
-  // Controllers to retrieve text field values
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-
-  @override
   Widget build(BuildContext context) {
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+    bool rememberMe = false;
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -64,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 30),
               TextField(
-                controller: _emailController,
+                controller: emailController,
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   labelText: "Email",
@@ -75,28 +70,32 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              TextField(
-                controller: _passwordController,
-                obscureText: _obscureTextPassword,
-                decoration: InputDecoration(
-                  labelText: "Password",
-                  prefixIcon: const Icon(Icons.lock),
-                  suffixIcon: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _obscureTextPassword = !_obscureTextPassword;
-                      });
-                    },
-                    child: Icon(
-                      _obscureTextPassword
-                          ? Icons.visibility_off
-                          : Icons.visibility,
+              BlocBuilder<LoginScreenCubit, LoginState>(
+                builder: (context, state) {
+                  return TextField(
+                    controller: passwordController,
+                    obscureText: state.isPasswordHidden,
+                    decoration: InputDecoration(
+                      labelText: "Password",
+                      prefixIcon: const Icon(Icons.lock),
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          context
+                              .read<LoginScreenCubit>()
+                              .togglePasswordVisibility();
+                        },
+                        child: Icon(
+                          state.isPasswordHidden
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                        ),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                     ),
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
+                  );
+                },
               ),
               const SizedBox(height: 10),
               Row(
@@ -105,11 +104,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   Row(
                     children: [
                       Checkbox(
-                        value: _rememberMe,
+                        value: rememberMe,
                         onChanged: (value) {
-                          setState(() {
-                            _rememberMe = value ?? false;
-                          });
+                          rememberMe = value ?? false;
                         },
                       ),
                       const Text("Remember me"),
@@ -129,20 +126,11 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () {
-                  // Dummy credentials check
-                  if (_emailController.text == "admin@123" &&
-                      _passwordController.text == "admin123") {
-                    // If credentials are correct, proceed (you can navigate to the next screen)
-                    Navigator.pushReplacementNamed(context, '/dashboard');
-                  } else {
-                    // If credentials are incorrect, show error message
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Invalid email or password!"),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  }
+                  context.read<LoginScreenCubit>().login(
+                        context,
+                        emailController.text,
+                        passwordController.text,
+                      );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.deepPurple,
@@ -166,8 +154,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      // Navigate to signup screen using named route
-                      Navigator.pushNamed(context, '/signup');
+                      context
+                          .read<LoginScreenCubit>()
+                          .navigateToSignUp(context);
                     },
                     child: const Text(
                       "Signup",
