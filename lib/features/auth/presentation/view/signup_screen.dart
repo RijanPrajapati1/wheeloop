@@ -1,10 +1,42 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:wheeloop/features/auth/presentation/view_model/signup/signup_screen_cubit.dart';
 import 'package:wheeloop/features/auth/presentation/view_model/signup/signup_state.dart';
 
-class SignUpScreen extends StatelessWidget {
+class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
+
+  @override
+  _SignUpScreenState createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
+  File? _image;
+
+  // Check for camera permission
+  Future<void> checkCameraPermission() async {
+    if (await Permission.camera.request().isRestricted ||
+        await Permission.camera.request().isDenied) {
+      await Permission.camera.request();
+    }
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    try {
+      final pickedFile = await ImagePicker().pickImage(source: source);
+      if (pickedFile != null) {
+        setState(() {
+          _image = File(pickedFile.path);
+        });
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,18 +80,89 @@ class SignUpScreen extends StatelessWidget {
                       style: TextStyle(fontSize: 14, color: Colors.black),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 20),
-                    Container(
-                      height: 100,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        image: const DecorationImage(
-                          image: AssetImage('assets/logos/logo.png'),
-                          fit: BoxFit.contain,
+                    const SizedBox(height: 8),
+
+                    // Profile Image Picker
+                    GestureDetector(
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(20),
+                            ),
+                          ),
+                          builder: (context) => Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                ElevatedButton.icon(
+                                  onPressed: () {
+                                    checkCameraPermission();
+                                    _pickImage(ImageSource.camera);
+                                    Navigator.pop(context);
+                                  },
+                                  icon: const Icon(
+                                    Icons.camera,
+                                    color: Color.fromARGB(255, 255, 255, 255),
+                                  ),
+                                  label: const Text('Camera'),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.deepPurple,
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 14, horizontal: 16),
+                                  ),
+                                ),
+                                ElevatedButton.icon(
+                                  onPressed: () {
+                                    _pickImage(ImageSource.gallery);
+                                    Navigator.pop(context);
+                                  },
+                                  icon: const Icon(
+                                    Icons.image,
+                                    color: Color.fromARGB(255, 255, 255, 255),
+                                  ),
+                                  label: const Text('Gallery'),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.deepPurple,
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 14, horizontal: 16),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                      child: SizedBox(
+                        height: 100,
+                        width: 100,
+                        child: CircleAvatar(
+                          radius: 50,
+                          backgroundColor: Colors
+                              .transparent, // Make sure background is transparent
+                          child: ClipOval(
+                            child: Image(
+                              image: _image != null
+                                  ? FileImage(_image!)
+                                  : const AssetImage(
+                                          'assets/logos/default_pp.png')
+                                      as ImageProvider,
+                              fit: BoxFit
+                                  .cover, // Ensures image fits inside the circle without distortion
+                              width:
+                                  100, // Ensures the image takes the full width of the CircleAvatar
+                              height:
+                                  100, // Ensures the image takes the full height of the CircleAvatar
+                            ),
+                          ),
                         ),
                       ),
                     ),
                     const SizedBox(height: 15),
+
                     // Full Name TextField
                     TextFormField(
                       controller: cubit.nameController,
@@ -76,6 +179,7 @@ class SignUpScreen extends StatelessWidget {
                       },
                     ),
                     const SizedBox(height: 15),
+
                     // Phone Number TextField
                     TextFormField(
                       controller: cubit.phoneController,
@@ -93,6 +197,7 @@ class SignUpScreen extends StatelessWidget {
                       },
                     ),
                     const SizedBox(height: 15),
+
                     // Email TextField
                     TextFormField(
                       controller: cubit.emailController,
@@ -110,7 +215,8 @@ class SignUpScreen extends StatelessWidget {
                       },
                     ),
                     const SizedBox(height: 15),
-                    //address
+
+                    // Address TextField
                     TextFormField(
                       controller: cubit.addressController,
                       decoration: InputDecoration(
@@ -126,6 +232,7 @@ class SignUpScreen extends StatelessWidget {
                       },
                     ),
                     const SizedBox(height: 15),
+
                     // Password TextField
                     TextFormField(
                       controller: cubit.passwordController,
@@ -143,6 +250,7 @@ class SignUpScreen extends StatelessWidget {
                       },
                     ),
                     const SizedBox(height: 15),
+
                     // Confirm Password TextField
                     TextFormField(
                       controller: cubit.confirmPasswordController,
@@ -160,6 +268,7 @@ class SignUpScreen extends StatelessWidget {
                       },
                     ),
                     const SizedBox(height: 20),
+
                     // Sign Up Button
                     ElevatedButton(
                       onPressed: state.isLoading
@@ -186,6 +295,7 @@ class SignUpScreen extends StatelessWidget {
                             ),
                     ),
                     const SizedBox(height: 10),
+
                     // Login Navigation Button
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
