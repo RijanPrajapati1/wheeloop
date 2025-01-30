@@ -1,9 +1,9 @@
 import 'package:wheeloop/features/auth/domain/entity/auth_entity.dart';
 
 abstract interface class IAuthDataSource {
-  Future<String> loginCustomer(String email, String password);
+  Future<String> loginUser(String email, String password);
 
-  Future<void> registerCustomer(AuthEntity customer);
+  Future<void> registerUser(AuthEntity user);
 
   Future<AuthEntity> getCurrentUser();
 

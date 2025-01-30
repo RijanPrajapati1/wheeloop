@@ -7,10 +7,10 @@ import 'package:wheeloop/features/auth/domain/entity/auth_entity.dart';
 part 'auth_hive_model.g.dart';
 // dart run build_runner build -d
 
-@HiveType(typeId: HiveTableConstant.customerTableId)
+@HiveType(typeId: HiveTableConstant.userTableId)
 class AuthHiveModel extends Equatable {
   @HiveField(0)
-  final String? customerId;
+  final String? userId;
   @HiveField(1)
   final String name;
   @HiveField(2)
@@ -25,18 +25,18 @@ class AuthHiveModel extends Equatable {
   final String confirmPassword;
 
   AuthHiveModel({
-    String? customerId,
+    String? userId,
     required this.name,
     required this.phone,
     required this.email,
     required this.address,
     required this.password,
     required this.confirmPassword,
-  }) : customerId = customerId ?? const Uuid().v4();
+  }) : userId = userId ?? const Uuid().v4();
 
   // Initial Constructor
   const AuthHiveModel.initial()
-      : customerId = '',
+      : userId = '',
         name = '',
         phone = '',
         email = '',
@@ -47,7 +47,7 @@ class AuthHiveModel extends Equatable {
   // From Entity
   factory AuthHiveModel.fromEntity(AuthEntity entity) {
     return AuthHiveModel(
-      customerId: entity.userId,
+      userId: entity.userId,
       name: entity.name,
       phone: entity.phone,
       email: entity.email,
@@ -60,7 +60,7 @@ class AuthHiveModel extends Equatable {
   // To Entity
   AuthEntity toEntity() {
     return AuthEntity(
-      userId: customerId,
+      userId: userId,
       name: name,
       phone: phone,
       email: email,
@@ -72,5 +72,5 @@ class AuthHiveModel extends Equatable {
 
   @override
   List<Object?> get props =>
-      [customerId, name, phone, email, address, password, confirmPassword];
+      [userId, name, phone, email, address, password, confirmPassword];
 }
