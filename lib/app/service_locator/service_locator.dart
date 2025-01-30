@@ -88,7 +88,7 @@ _initSignupDependencies() {
 _initLoginDepedencies() {
   // register login use case
   serviceLocator.registerLazySingleton<LoginUseCase>(
-    () => LoginUseCase(serviceLocator<AuthLocalRepository>()),
+    () => LoginUseCase(serviceLocator<AuthRemoteRepository>()),
   );
 
   serviceLocator.registerFactory<LoginScreenCubit>(
