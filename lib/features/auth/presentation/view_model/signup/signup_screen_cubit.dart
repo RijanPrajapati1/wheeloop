@@ -1,20 +1,24 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wheeloop/app/service_locator/service_locator.dart';
 import 'package:wheeloop/features/auth/domain/use_case/register_usecase.dart';
+import 'package:wheeloop/features/auth/domain/use_case/upload_image_usecase.dart';
 import 'package:wheeloop/features/auth/presentation/view/login_screen.dart';
 import 'package:wheeloop/features/auth/presentation/view_model/login/login_screen_cubit.dart';
 import 'package:wheeloop/features/auth/presentation/view_model/signup/signup_state.dart';
 
 class SignUpScreenCubit extends Cubit<SignUpState> {
   final RegisterUseCase _registerUseCase;
+  final UploadImageUsecase _uploadImageUsecase;
 
-  SignUpScreenCubit({required RegisterUseCase registerUseCase})
-      : _registerUseCase = registerUseCase,
-        super(SignUpState(
-          validationErrors: {},
-          isLoading: false,
-        ));
+  SignUpScreenCubit({
+    required RegisterUseCase registerUseCase,
+    required UploadImageUsecase uploadImageUsecase,
+  })  : _registerUseCase = registerUseCase,
+        _uploadImageUsecase = uploadImageUsecase,
+        super(SignUpState.initial());
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
@@ -107,6 +111,21 @@ class SignUpScreenCubit extends Cubit<SignUpState> {
           child: const LoginScreen(),
         ),
       ),
+    );
+  }
+
+  // Image Upload Event
+  void uploadImage(File file) async {
+    emit(state.copyWith(isLoading: true));
+    final result = await _uploadImageUsecase.call(
+      UploadImageParams(file: file),
+    );
+
+    result.fold(
+      (l) => emit(state.copyWith(isLoading: false, isSuccess: false)),
+      (r) {
+        emit(state.copyWith(isLoading: false, isSuccess: true, imageName: r));
+      },
     );
   }
 }

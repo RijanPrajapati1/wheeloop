@@ -12,6 +12,7 @@ class RegisterUserParams extends Equatable {
   final String address;
   final String password;
   final String confirmPassword;
+  final String? image;
 
   const RegisterUserParams({
     required this.name,
@@ -20,6 +21,7 @@ class RegisterUserParams extends Equatable {
     required this.address,
     required this.password,
     required this.confirmPassword,
+    this.image,
   });
 
   //intial constructor
@@ -30,11 +32,12 @@ class RegisterUserParams extends Equatable {
     required this.address,
     required this.password,
     required this.confirmPassword,
+    this.image,
   });
 
   @override
   List<Object?> get props =>
-      [name, phone, email, address, password, confirmPassword];
+      [name, phone, email, address, password, confirmPassword, image];
 }
 
 class RegisterUseCase implements UsecaseWithParams<void, RegisterUserParams> {
@@ -51,6 +54,7 @@ class RegisterUseCase implements UsecaseWithParams<void, RegisterUserParams> {
       address: params.address,
       password: params.password,
       confirmPassword: params.confirmPassword,
+      image: params.image,
     );
     return repository.registerUser(authEntity);
   }

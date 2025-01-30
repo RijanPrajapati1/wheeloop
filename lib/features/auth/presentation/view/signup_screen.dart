@@ -32,6 +32,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         setState(() {
           _image = File(pickedFile.path);
         });
+        context.read<SignUpScreenCubit>().uploadImage(_image!);
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -141,8 +142,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         width: 100,
                         child: CircleAvatar(
                           radius: 50,
-                          backgroundColor: Colors
-                              .transparent, // Make sure background is transparent
+                          backgroundColor: Colors.transparent,
                           child: ClipOval(
                             child: Image(
                               image: _image != null
@@ -150,12 +150,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   : const AssetImage(
                                           'assets/logos/default_pp.png')
                                       as ImageProvider,
-                              fit: BoxFit
-                                  .cover, // Ensures image fits inside the circle without distortion
-                              width:
-                                  100, // Ensures the image takes the full width of the CircleAvatar
-                              height:
-                                  100, // Ensures the image takes the full height of the CircleAvatar
+                              fit: BoxFit.cover,
+                              width: 100,
+                              height: 100,
                             ),
                           ),
                         ),
