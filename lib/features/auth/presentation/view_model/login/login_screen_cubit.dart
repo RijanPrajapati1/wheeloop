@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wheeloop/features/auth/domain/use_case/login_usecase.dart'; // Import the use case
+import 'package:wheeloop/features/auth/domain/use_case/login_usecase.dart';
 import 'package:wheeloop/features/auth/presentation/view/signup_screen.dart';
 import 'package:wheeloop/features/auth/presentation/view_model/login/login_state.dart';
 import 'package:wheeloop/features/auth/presentation/view_model/signup/signup_screen_cubit.dart';
 import 'package:wheeloop/features/dashboard/presentation/view/dashboard_view.dart';
 import 'package:wheeloop/features/dashboard/presentation/view_model/dashboard_cubit.dart';
 
-// Modify the LoginScreenCubit to extend Cubit<LoginState> and handle events
-
 class LoginScreenCubit extends Cubit<LoginState> {
   final SignUpScreenCubit _signUpScreenCubit;
-  final LoginUseCase _loginUseCase; // Add the LoginUseCase for login logic
+  final LoginUseCase _loginUseCase;
 
   LoginScreenCubit(this._signUpScreenCubit, this._loginUseCase)
       : super(LoginState.initial());
 
-  // Function to handle login logic (replacing the hardcoded logic in the original Cubit)
   void login(BuildContext context, String email, String password) async {
     emit(state.copyWith(isLoading: true)); // Show loading state
 
