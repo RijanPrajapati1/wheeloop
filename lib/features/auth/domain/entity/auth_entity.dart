@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 class AuthEntity extends Equatable {
   final String? userId;
   final String name;
+  final String? image;
   final String phone;
   final String email;
   final String address;
@@ -12,6 +13,7 @@ class AuthEntity extends Equatable {
   const AuthEntity({
     this.userId,
     required this.name,
+    this.image,
     required this.phone,
     required this.email,
     required this.address,
@@ -21,5 +23,5 @@ class AuthEntity extends Equatable {
 
   @override
   List<Object?> get props =>
-      [userId, name, phone, email, address, password, confirmPassword];
+      [userId, name, image, phone, email, address, password, confirmPassword];
 }

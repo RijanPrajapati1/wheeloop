@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:wheeloop/core/network/hive_service.dart';
 import 'package:wheeloop/features/auth/data/data_source/auth_data_source.dart';
 import 'package:wheeloop/features/auth/data/model/auth_hive_model.dart';
@@ -17,6 +19,7 @@ class AuthLocalDataSource implements IAuthDataSource {
       phone: "",
       email: "",
       address: "",
+      image: null,
       password: "",
       confirmPassword: "",
     ));
@@ -45,8 +48,9 @@ class AuthLocalDataSource implements IAuthDataSource {
     }
   }
 
-  // @override
-  // Future<String> uploadProfilePicture(File file) {
-  //   throw UnimplementedError();
-  // }
+  @override
+  Future<String> uploadProfilePicture(File file) {
+    // TODO: implement uploadProfilePicture
+    throw UnimplementedError();
+  }
 }
