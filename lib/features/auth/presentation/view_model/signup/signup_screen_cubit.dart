@@ -90,7 +90,6 @@ class SignUpScreenCubit extends Cubit<SignUpState> {
     );
   }
 
-  // Event: Handle signup using UseCase
   Future<void> signUp(BuildContext context) async {
     validateForm();
     if (state.validationErrors.isNotEmpty) return;
@@ -105,13 +104,8 @@ class SignUpScreenCubit extends Cubit<SignUpState> {
       uploadedImageUrl = state.imageName;
     }
 
-    if (uploadedImageUrl == null) {
-      emit(state.copyWith(isLoading: false));
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please upload a profile image')),
-      );
-      return;
-    }
+    // If the image is not uploaded, proceed without it
+    uploadedImageUrl ??= '';
 
     // Create the parameters for the use case
     final registerUserParams = RegisterUserParams(
@@ -130,18 +124,22 @@ class SignUpScreenCubit extends Cubit<SignUpState> {
     // Handle the result (success or failure)
     result.fold(
       (failure) {
-        emit(state.copyWith(isLoading: false));
+        emit(state.copyWith(
+            isLoading: false,
+            isSuccess: false)); // Show loading false on failure
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(failure.message)),
+          SnackBar(content: Text('Registration failed: ${failure.message}')),
         );
       },
       (success) {
-        emit(state.copyWith(isLoading: false));
+        emit(state.copyWith(
+            isLoading: false,
+            isSuccess: true)); // Show loading false on success
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
               content: Text('Signup successful! Redirecting to Login')),
         );
-        navigateToLogin(context);
+        navigateToLogin(context); // Redirect to Login screen
       },
     );
   }
