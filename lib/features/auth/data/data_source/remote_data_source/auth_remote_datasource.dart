@@ -22,6 +22,7 @@ class AuthRemoteDataSource implements IAuthDataSource {
           "address": user.address,
           "password": user.password,
           "confirmPassword": user.confirmPassword,
+          "image": user.image,
         },
       );
 
