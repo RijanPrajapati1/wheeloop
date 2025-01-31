@@ -32,7 +32,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
         setState(() {
           _image = File(pickedFile.path);
         });
-        context.read<SignUpScreenCubit>().uploadImage(_image!);
+
+        // Check if the widget is still mounted before using context
+        if (mounted) {
+          context.read<SignUpScreenCubit>().uploadImage(_image!);
+        }
       }
     } catch (e) {
       debugPrint(e.toString());

@@ -28,6 +28,8 @@ class SignUpScreenCubit extends Cubit<SignUpState> {
   final TextEditingController confirmPasswordController =
       TextEditingController();
 
+  File? selectedImage; // Store selected image file
+
   // Event: Validate the form
   void validateForm() {
     final errors = <String, String>{};
@@ -62,43 +64,86 @@ class SignUpScreenCubit extends Cubit<SignUpState> {
     emit(state.copyWith(validationErrors: errors));
   }
 
+  // Image Upload Event
+  Future<void> uploadImage(File file) async {
+    emit(state.copyWith(isLoading: true));
+
+    final result = await _uploadImageUsecase.call(
+      UploadImageParams(file: file),
+    );
+
+    result.fold(
+      (failure) {
+        emit(state.copyWith(isLoading: false, isSuccess: false));
+        ScaffoldMessenger.of(serviceLocator<BuildContext>()).showSnackBar(
+          SnackBar(content: Text('Image upload failed: ${failure.message}')),
+        );
+      },
+      (imageUrl) {
+        emit(state.copyWith(
+          isLoading: false,
+          isSuccess: true,
+          imageName: imageUrl,
+        ));
+        selectedImage = file; // Store selected image for future reference
+      },
+    );
+  }
+
   // Event: Handle signup using UseCase
   Future<void> signUp(BuildContext context) async {
     validateForm();
-    if (state.validationErrors.isEmpty) {
-      emit(state.copyWith(isLoading: true));
+    if (state.validationErrors.isNotEmpty) return;
 
-      // Create the parameters for the use case
-      final registerUserParams = RegisterUserParams(
-        name: nameController.text,
-        phone: phoneController.text,
-        email: emailController.text,
-        address: addressController.text,
-        password: passwordController.text,
-        confirmPassword: confirmPasswordController.text,
-      );
+    emit(state.copyWith(isLoading: true));
 
-      // Call the UseCase
-      final result = await _registerUseCase.call(registerUserParams);
+    String? uploadedImageUrl = state.imageName;
 
-      // Handle the result (success or failure)
-      result.fold(
-        (failure) {
-          emit(state.copyWith(isLoading: false));
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(failure.message)),
-          );
-        },
-        (success) {
-          emit(state.copyWith(isLoading: false));
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-                content: Text('Signup successful! Redirecting to Login')),
-          );
-          navigateToLogin(context);
-        },
-      );
+    // Upload image if selected but not uploaded yet
+    if (selectedImage != null && uploadedImageUrl == null) {
+      await uploadImage(selectedImage!);
+      uploadedImageUrl = state.imageName;
     }
+
+    if (uploadedImageUrl == null) {
+      emit(state.copyWith(isLoading: false));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please upload a profile image')),
+      );
+      return;
+    }
+
+    // Create the parameters for the use case
+    final registerUserParams = RegisterUserParams(
+      name: nameController.text,
+      phone: phoneController.text,
+      email: emailController.text,
+      address: addressController.text,
+      password: passwordController.text,
+      confirmPassword: confirmPasswordController.text,
+      image: uploadedImageUrl, // Ensure image is included
+    );
+
+    // Call the UseCase
+    final result = await _registerUseCase.call(registerUserParams);
+
+    // Handle the result (success or failure)
+    result.fold(
+      (failure) {
+        emit(state.copyWith(isLoading: false));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(failure.message)),
+        );
+      },
+      (success) {
+        emit(state.copyWith(isLoading: false));
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('Signup successful! Redirecting to Login')),
+        );
+        navigateToLogin(context);
+      },
+    );
   }
 
   // Event: Navigate to Login Screen
@@ -111,21 +156,6 @@ class SignUpScreenCubit extends Cubit<SignUpState> {
           child: const LoginScreen(),
         ),
       ),
-    );
-  }
-
-  // Image Upload Event
-  void uploadImage(File file) async {
-    emit(state.copyWith(isLoading: true));
-    final result = await _uploadImageUsecase.call(
-      UploadImageParams(file: file),
-    );
-
-    result.fold(
-      (l) => emit(state.copyWith(isLoading: false, isSuccess: false)),
-      (r) {
-        emit(state.copyWith(isLoading: false, isSuccess: true, imageName: r));
-      },
     );
   }
 }
