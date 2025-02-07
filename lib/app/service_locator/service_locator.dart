@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wheeloop/app/shared_prefs/token_shared_prefs.dart';
 import 'package:wheeloop/core/network/api_service.dart';
 import 'package:wheeloop/core/network/hive_service.dart';
 import 'package:wheeloop/features/auth/data/data_source/local_data_source/auth_local_datasource.dart';
@@ -21,12 +23,19 @@ final serviceLocator = GetIt.instance;
 Future<void> initDependencies() async {
   await _initHiveService();
   await _initApiService();
+  await _initSharedPreferences();
   await _initSignupDependencies();
   await _initLoginDepedencies();
   await _initSplashScreenDependencies();
   await _initOnBoardingScreenDependencies();
   await _initHomeDependencies();
   await _initDashboardDependencies();
+}
+
+Future<void> _initSharedPreferences() async {
+  final sharedPreferences = await SharedPreferences.getInstance();
+  serviceLocator
+      .registerLazySingleton<SharedPreferences>(() => sharedPreferences);
 }
 
 _initApiService() {
@@ -87,14 +96,33 @@ _initSignupDependencies() {
 
 _initLoginDepedencies() {
   // register login use case
+
+  //token shared preferenes
+  serviceLocator.registerLazySingleton<TokenSharedPrefs>(
+    () => TokenSharedPrefs(serviceLocator<SharedPreferences>()),
+  );
+
+  //usecase
   serviceLocator.registerLazySingleton<LoginUseCase>(
-    () => LoginUseCase(serviceLocator<AuthRemoteRepository>()),
+    () => LoginUseCase(
+      serviceLocator<AuthRemoteRepository>(),
+      serviceLocator<TokenSharedPrefs>(),
+    ),
   );
 
   serviceLocator.registerFactory<LoginScreenCubit>(
     () => LoginScreenCubit(
         serviceLocator<SignUpScreenCubit>(), serviceLocator<LoginUseCase>()),
   );
+
+  // serviceLocator.registerLazySingleton<LoginUseCase>(
+  //   () => LoginUseCase(serviceLocator<AuthRemoteRepository>()),
+  // );
+
+  // serviceLocator.registerFactory<LoginScreenCubit>(
+  //   () => LoginScreenCubit(
+  //       serviceLocator<SignUpScreenCubit>(), serviceLocator<LoginUseCase>()),
+  // );
 }
 
 _initSplashScreenDependencies() async {
