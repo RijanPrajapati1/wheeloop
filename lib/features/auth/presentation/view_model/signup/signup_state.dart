@@ -1,17 +1,19 @@
-class SignUpState {
+import 'package:equatable/equatable.dart';
+
+class SignUpState extends Equatable {
   final Map<String, String> validationErrors;
   final bool isLoading;
   final bool isSuccess;
   final String? imageName;
 
-  SignUpState({
+  const SignUpState({
     required this.validationErrors,
     required this.isLoading,
     this.isSuccess = false,
     this.imageName,
   });
 
-  factory SignUpState.initial() => SignUpState(
+  factory SignUpState.initial() => const SignUpState(
         validationErrors: {},
         isLoading: false,
       );
@@ -29,4 +31,8 @@ class SignUpState {
       imageName: imageName ?? this.imageName,
     );
   }
+
+  @override
+  List<Object?> get props =>
+      [validationErrors, isLoading, isSuccess, imageName];
 }
