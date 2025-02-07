@@ -35,6 +35,16 @@ class RegisterUserParams extends Equatable {
     this.image,
   });
 
+  //create an empty constructor or inital constructor
+  const RegisterUserParams.empty()
+      : name = '_empty.name',
+        image = '_empty.image',
+        phone = '_empty.phone',
+        email = '_empty.email',
+        address = '_empty.name',
+        password = '_empty.password',
+        confirmPassword = '_empty.confirmPassword';
+
   @override
   List<Object?> get props =>
       [name, phone, email, address, password, confirmPassword, image];

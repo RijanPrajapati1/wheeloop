@@ -11,6 +11,9 @@ class UploadImageParams {
   const UploadImageParams({
     required this.file,
   });
+
+  // Empty constructor initializing an empty File object
+  UploadImageParams.empty() : file = File('');
 }
 
 class UploadImageUsecase
