@@ -25,7 +25,7 @@ void main() {
         .thenAnswer((invocation) async {
       final email = invocation.positionalArguments[0] as String;
       final password = invocation.positionalArguments[1] as String;
-      if (email == 'rijan@gmail.com' && password == 'rijan123') {
+      if (email == 'rijan' && password == 'rijan123') {
         return Future.value(const Right('token'));
       } else {
         return Future.value(
@@ -38,7 +38,7 @@ void main() {
     );
 
     final result = await usecase(const LoginParams(
-      email: 'rijan@gmail.com',
+      email: 'rijan',
       password: 'rijan123',
     ));
 
