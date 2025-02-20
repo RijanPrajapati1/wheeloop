@@ -1,0 +1,2 @@
+C:/Users/rijan/Desktop/wheeloop/android/app/.cxx/Debug/3g562n3j/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/rijan/Desktop/wheeloop/android/app/.cxx/Debug/3g562n3j/armeabi-v7a/CMakeFiles/rebuild_cache.dir

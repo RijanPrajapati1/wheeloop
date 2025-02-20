@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:wheeloop/features/admin/presentation/view/admin_dashboard_screen.dart';
+
+
 import 'package:wheeloop/features/auth/domain/use_case/login_usecase.dart';
 import 'package:wheeloop/features/auth/presentation/view/signup_screen.dart';
 import 'package:wheeloop/features/auth/presentation/view_model/login/login_state.dart';
@@ -16,6 +20,47 @@ class LoginScreenCubit extends Cubit<LoginState> {
 
   void login(BuildContext context, String email, String password) async {
     emit(state.copyWith(isLoading: true)); // Show loading state
+
+
+    if (email == "admin@gmail.com" && password == "password") {
+      // Navigate to Admin Dashboard
+      emit(state.copyWith(isLoading: false, isSuccess: true));
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const AdminDashboardScreen(),
+        ),
+      );
+    } else {
+      // Call the login use case for customer login
+      final result = await _loginUseCase(
+        LoginParams(email: email, password: password),
+      );
+
+      result.fold(
+        (failure) {
+          emit(state.copyWith(isLoading: false, isSuccess: false));
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Invalid email or password!"),
+              backgroundColor: Colors.red,
+            ),
+          );
+        },
+        (token) {
+          emit(state.copyWith(isLoading: false, isSuccess: true));
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BlocProvider.value(
+                value: DashboardCubit(),
+                child: const DashboardScreen(),
+              ),
+            ),
+          );
+        },
+      );
+    }
 
     final result = await _loginUseCase(
       LoginParams(email: email, password: password), // Call the login use case
@@ -47,6 +92,7 @@ class LoginScreenCubit extends Cubit<LoginState> {
         );
       },
     );
+
   }
 
   // Method to toggle password visibility
