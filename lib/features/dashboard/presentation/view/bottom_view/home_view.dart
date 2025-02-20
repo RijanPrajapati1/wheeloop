@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:wheeloop/features/brand/presentation/widget/view/brand_screen.dart';
+import 'package:wheeloop/features/brand/presentation/view/brand_screen.dart';
 import 'package:wheeloop/features/car/presentation/view/car_screen.dart';
-
-import 'package:wheeloop/features/dashboard/presentation/view/bottom_view/car_screen/brand_screen.dart';
-import 'package:wheeloop/features/dashboard/presentation/view/bottom_view/car_screen/car_screen.dart';
-
 import 'package:wheeloop/features/dashboard/presentation/view_model/home_cubit.dart';
 import 'package:wheeloop/features/dashboard/presentation/view_model/home_state.dart';
 
