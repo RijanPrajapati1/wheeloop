@@ -4,12 +4,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wheeloop/app/shared_prefs/token_shared_prefs.dart';
 import 'package:wheeloop/core/network/api_service.dart';
 import 'package:wheeloop/core/network/hive_service.dart';
+
 import 'package:wheeloop/features/admin/data/data_source/remote_data_source/car_remote_datasource.dart';
 import 'package:wheeloop/features/admin/data/repository/car_remote_repository/car_remote_repository.dart';
 import 'package:wheeloop/features/admin/domain/repository/car_repository.dart';
 import 'package:wheeloop/features/admin/domain/use_case/car_usecase.dart';
 import 'package:wheeloop/features/admin/domain/use_case/upload_car_image.dart';
 import 'package:wheeloop/features/admin/presentation/view_model/admin_car_cubit.dart';
+
 import 'package:wheeloop/features/auth/data/data_source/local_data_source/auth_local_datasource.dart';
 import 'package:wheeloop/features/auth/data/data_source/remote_data_source/auth_remote_datasource.dart';
 import 'package:wheeloop/features/auth/data/repository/auth_local_repository/auth_local_repository.dart';
@@ -34,7 +36,10 @@ Future<void> initDependencies() async {
   await _initLoginDepedencies();
   await _initSplashScreenDependencies();
   await _initOnBoardingScreenDependencies();
+
   await _initAdminDependencies();
+
+
   await _initHomeDependencies();
   await _initDashboardDependencies();
 }
@@ -143,6 +148,7 @@ _initOnBoardingScreenDependencies() async {
     () => OnboardingScreenCubit(),
   );
 }
+
 
 _initAdminDependencies() async {
   // Register Data Source
