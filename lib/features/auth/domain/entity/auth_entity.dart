@@ -2,9 +2,9 @@ import 'package:equatable/equatable.dart';
 
 class AuthEntity extends Equatable {
   final String? userId;
-  final String name;
+  final String full_name;
   final String? image;
-  final String phone;
+  final String phone_number;
   final String email;
   final String address;
   final String password;
@@ -12,9 +12,9 @@ class AuthEntity extends Equatable {
 
   const AuthEntity({
     this.userId,
-    required this.name,
+    required this.full_name,
     this.image,
-    required this.phone,
+    required this.phone_number,
     required this.email,
     required this.address,
     required this.password,
@@ -24,15 +24,23 @@ class AuthEntity extends Equatable {
   //create an empty constructor or inital constructor
   const AuthEntity.empty()
       : userId = '_empty.userId',
-        name = '_empty.name',
+        full_name = '_empty.full_name',
         image = '_empty.image',
-        phone = '_empty.phone',
+        phone_number = '_empty.phone_number',
         email = '_empty.email',
-        address = '_empty.name',
+        address = '_empty.address',
         password = '_empty.password',
         confirmPassword = '_empty.confirmPassword';
 
   @override
-  List<Object?> get props =>
-      [userId, name, image, phone, email, address, password, confirmPassword];
+  List<Object?> get props => [
+        userId,
+        full_name,
+        image,
+        phone_number,
+        email,
+        address,
+        password,
+        confirmPassword
+      ];
 }

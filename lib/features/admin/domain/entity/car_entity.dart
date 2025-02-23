@@ -19,6 +19,19 @@ class CarEntity extends Equatable {
     required this.image,
   });
 
+  //  Ensure no null values from API
+  factory CarEntity.fromJson(Map<String, dynamic> json) {
+    return CarEntity(
+      id: json["_id"] ?? '',
+      name: json["name"] ?? '',
+      type: json["brand"] ?? '', // Mapping "brand" instead of "type"
+      price: json["price"] ?? '',
+      description: json["description"] ?? '',
+      transmission: json["transmission"] ?? '',
+      image: json["image"] ?? '', // Converts null to empty string
+    );
+  }
+
   // Empty Constructor for Initial State
   const CarEntity.empty()
       : id = '_empty.id',

@@ -109,8 +109,8 @@ class SignUpScreenCubit extends Cubit<SignUpState> {
 
     // Create the parameters for the use case
     final registerUserParams = RegisterUserParams(
-      name: nameController.text,
-      phone: phoneController.text,
+      full_name: nameController.text,
+      phone_number: phoneController.text,
       email: emailController.text,
       address: addressController.text,
       password: passwordController.text,

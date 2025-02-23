@@ -31,6 +31,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wheeloop/app/service_locator/service_locator.dart';
 import 'package:wheeloop/core/app_theme/app_theme.dart';
 import 'package:wheeloop/features/admin/presentation/view_model/admin_car_cubit.dart';
+import 'package:wheeloop/features/admin/presentation/view_model/admin_fetching_car_cubit.dart';
 import 'package:wheeloop/features/auth/presentation/view_model/login/login_screen_cubit.dart';
 import 'package:wheeloop/features/auth/presentation/view_model/signup/signup_screen_cubit.dart';
 import 'package:wheeloop/features/dashboard/presentation/view_model/dashboard_cubit.dart';
@@ -51,6 +52,7 @@ class RouteGenerator extends StatelessWidget {
         BlocProvider(create: (_) => serviceLocator<LoginScreenCubit>()),
         BlocProvider(create: (_) => serviceLocator<SignUpScreenCubit>()),
         BlocProvider(create: (_) => serviceLocator<AdminCarCubit>()),
+        BlocProvider(create: (_) => serviceLocator<AdminFetchCarCubit>()),
         BlocProvider(create: (_) => serviceLocator<HomeCubit>()),
         BlocProvider(create: (_) => serviceLocator<DashboardCubit>()),
       ],

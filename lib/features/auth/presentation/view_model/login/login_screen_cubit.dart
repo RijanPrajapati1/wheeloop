@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:wheeloop/features/admin/presentation/view/admin_dashboard_screen.dart';
-
-
 import 'package:wheeloop/features/auth/domain/use_case/login_usecase.dart';
 import 'package:wheeloop/features/auth/presentation/view/signup_screen.dart';
 import 'package:wheeloop/features/auth/presentation/view_model/login/login_state.dart';
@@ -21,9 +18,8 @@ class LoginScreenCubit extends Cubit<LoginState> {
   void login(BuildContext context, String email, String password) async {
     emit(state.copyWith(isLoading: true)); // Show loading state
 
-
+    // Static Admin Credentials
     if (email == "admin@gmail.com" && password == "password") {
-      // Navigate to Admin Dashboard
       emit(state.copyWith(isLoading: false, isSuccess: true));
       Navigator.pushReplacement(
         context,
@@ -31,45 +27,17 @@ class LoginScreenCubit extends Cubit<LoginState> {
           builder: (context) => const AdminDashboardScreen(),
         ),
       );
-    } else {
-      // Call the login use case for customer login
-      final result = await _loginUseCase(
-        LoginParams(email: email, password: password),
-      );
-
-      result.fold(
-        (failure) {
-          emit(state.copyWith(isLoading: false, isSuccess: false));
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Invalid email or password!"),
-              backgroundColor: Colors.red,
-            ),
-          );
-        },
-        (token) {
-          emit(state.copyWith(isLoading: false, isSuccess: true));
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => BlocProvider.value(
-                value: DashboardCubit(),
-                child: const DashboardScreen(),
-              ),
-            ),
-          );
-        },
-      );
+      return; // Stop execution here to prevent error messages
     }
 
+    // Call the login use case for customer login
     final result = await _loginUseCase(
-      LoginParams(email: email, password: password), // Call the login use case
+      LoginParams(email: email, password: password),
     );
 
     result.fold(
       (failure) {
-        emit(state.copyWith(
-            isLoading: false, isSuccess: false)); // On failure, update state
+        emit(state.copyWith(isLoading: false, isSuccess: false));
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text("Invalid email or password!"),
@@ -78,9 +46,7 @@ class LoginScreenCubit extends Cubit<LoginState> {
         );
       },
       (token) {
-        emit(state.copyWith(
-            isLoading: false,
-            isSuccess: true)); // On success, navigate to the dashboard
+        emit(state.copyWith(isLoading: false, isSuccess: true));
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -92,7 +58,6 @@ class LoginScreenCubit extends Cubit<LoginState> {
         );
       },
     );
-
   }
 
   // Method to toggle password visibility

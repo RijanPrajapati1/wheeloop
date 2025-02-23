@@ -14,7 +14,7 @@ class AdminDashboardScreen extends StatefulWidget {
 }
 
 class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
-  Widget _selectedScreen = const AdminCarsScreen(); // Default screen
+  Widget _selectedScreen = const AdminFetchCarScreen(); // Default screen
 
   void _navigateTo(Widget screen) {
     setState(() {
@@ -39,7 +39,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             ListTile(
               leading: const Icon(Icons.directions_car),
               title: const Text("Manage Cars"),
-              onTap: () => _navigateTo(const AdminCarsScreen()),
+              onTap: () => _navigateTo(const AdminFetchCarScreen()),
             ),
             ListTile(
               leading: const Icon(Icons.business),
@@ -59,7 +59,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             ListTile(
               leading: const Icon(Icons.add),
               title: const Text("Add New Car"),
-              onTap: () => _navigateTo(AdminAddCarScreen()),
+              onTap: () => _navigateTo(const AdminAddCarScreen()),
             ),
           ],
         ),

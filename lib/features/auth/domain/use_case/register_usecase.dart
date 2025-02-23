@@ -6,8 +6,8 @@ import 'package:wheeloop/features/auth/domain/entity/auth_entity.dart';
 import 'package:wheeloop/features/auth/domain/repository/auth_repository.dart';
 
 class RegisterUserParams extends Equatable {
-  final String name;
-  final String phone;
+  final String full_name;
+  final String phone_number;
   final String email;
   final String address;
   final String password;
@@ -15,8 +15,8 @@ class RegisterUserParams extends Equatable {
   final String? image;
 
   const RegisterUserParams({
-    required this.name,
-    required this.phone,
+    required this.full_name,
+    required this.phone_number,
     required this.email,
     required this.address,
     required this.password,
@@ -26,8 +26,8 @@ class RegisterUserParams extends Equatable {
 
   //intial constructor
   const RegisterUserParams.initial({
-    required this.name,
-    required this.phone,
+    required this.full_name,
+    required this.phone_number,
     required this.email,
     required this.address,
     required this.password,
@@ -37,17 +37,24 @@ class RegisterUserParams extends Equatable {
 
   //create an empty constructor or inital constructor
   const RegisterUserParams.empty()
-      : name = '_empty.name',
+      : full_name = '_empty.full_name',
         image = '_empty.image',
-        phone = '_empty.phone',
+        phone_number = '_empty.phone_number',
         email = '_empty.email',
         address = '_empty.name',
         password = '_empty.password',
         confirmPassword = '_empty.confirmPassword';
 
   @override
-  List<Object?> get props =>
-      [name, phone, email, address, password, confirmPassword, image];
+  List<Object?> get props => [
+        full_name,
+        phone_number,
+        email,
+        address,
+        password,
+        confirmPassword,
+        image
+      ];
 }
 
 class RegisterUseCase implements UsecaseWithParams<void, RegisterUserParams> {
@@ -58,8 +65,8 @@ class RegisterUseCase implements UsecaseWithParams<void, RegisterUserParams> {
   @override
   Future<Either<Failure, void>> call(RegisterUserParams params) {
     final authEntity = AuthEntity(
-      name: params.name,
-      phone: params.phone,
+      full_name: params.full_name,
+      phone_number: params.phone_number,
       email: params.email,
       address: params.address,
       password: params.password,
