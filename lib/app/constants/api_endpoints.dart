@@ -21,6 +21,5 @@ class ApiEndpoints {
 
   static const String addCar = '/car';
   static const String getAllCars = '/car/findAll';
-  static const String uploadCarImage =
-      'http://10.0.2.2:3001/api/car/uploadImage';
+  static const String uploadCarImage = 'http://10.0.2.2:3001/car_images';
 }

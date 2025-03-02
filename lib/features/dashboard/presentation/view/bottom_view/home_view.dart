@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wheeloop/features/brand/presentation/view/brand_screen.dart';
 import 'package:wheeloop/features/car/presentation/view/car_screen.dart';
 import 'package:wheeloop/features/dashboard/presentation/view_model/home_cubit.dart';
 import 'package:wheeloop/features/dashboard/presentation/view_model/home_state.dart';
@@ -93,8 +92,8 @@ class HomeScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   // Top Brands Section
-                  const SizedBox(height: 10),
-                  const BrandScreen(),
+                  // const SizedBox(height: 10),
+                  // const BrandScreen(),
                   const SizedBox(height: 20),
                   // All Cars Section
                   const SizedBox(height: 10),

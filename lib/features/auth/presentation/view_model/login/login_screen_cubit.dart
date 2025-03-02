@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wheeloop/features/admin/presentation/view/admin_dashboard_screen.dart';
 import 'package:wheeloop/features/auth/domain/use_case/login_usecase.dart';
 import 'package:wheeloop/features/auth/presentation/view/signup_screen.dart';
 import 'package:wheeloop/features/auth/presentation/view_model/login/login_state.dart';
@@ -17,18 +16,6 @@ class LoginScreenCubit extends Cubit<LoginState> {
 
   void login(BuildContext context, String email, String password) async {
     emit(state.copyWith(isLoading: true)); // Show loading state
-
-    // Static Admin Credentials
-    if (email == "admin@gmail.com" && password == "password") {
-      emit(state.copyWith(isLoading: false, isSuccess: true));
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const AdminDashboardScreen(),
-        ),
-      );
-      return; // Stop execution here to prevent error messages
-    }
 
     // Call the login use case for customer login
     final result = await _loginUseCase(
