@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wheeloop/features/payment/presentation/view_model/payment_cubit.dart';
+import 'package:wheeloop/features/payment/presentation/view_model/payment_state.dart';
 
 class PaymentScreen extends StatefulWidget {
   const PaymentScreen({super.key});
@@ -143,62 +144,42 @@ class _PaymentScreenState extends State<PaymentScreen> {
               ],
               const SizedBox(height: 24),
               SizedBox(
-                  width: double.infinity,
-                  child:
-                      // child: ElevatedButton(
-                      //   onPressed: () {
-                      //     if (selectedPaymentOption == 'Credit Card' ||
-                      //         selectedPaymentOption == 'Debit Card') {
-                      //       if (cardHolderController.text.isEmpty ||
-                      //           cardNumberController.text.isEmpty ||
-                      //           expiryDateController.text.isEmpty ||
-                      //           cvvController.text.isEmpty) {
-                      //         showSnackbar("Please fill all card details.");
-                      //         return;
-                      //       }
-                      //     }
-
-                      //     // Prepare payment data
-                      //     final paymentData = {
-                      //       "paymentOption": selectedPaymentOption,
-                      //       "cardHolder": cardHolderController.text,
-                      //       "cardNumber": cardNumberController.text,
-                      //       "expiryDate": expiryDateController.text,
-                      //       "cvv": cvvController.text,
-                      //     };
-
-                      //     // Trigger payment using Cubit
-                      //     context.read<PaymentCubit>().processPayment(paymentData);
-                      //   },
-                      //   child: BlocBuilder<PaymentCubit, PaymentState>(
-                      //     builder: (context, state) {
-                      //       if (state is PaymentLoading) {
-                      //         return const CircularProgressIndicator();
-                      //       }
-                      //       return const Text("Confirm Payment");
-                      //     },
-                      //   ),
-                      // ),
-                      ElevatedButton(
-                    onPressed: () {
-                      if (selectedPaymentOption == 'Credit Card' ||
-                          selectedPaymentOption == 'Debit Card') {
-                        if (cardHolderController.text.isEmpty ||
-                            cardNumberController.text.isEmpty ||
-                            expiryDateController.text.isEmpty ||
-                            cvvController.text.isEmpty) {
-                          showSnackbar("Please fill all card details.");
-                          return;
-                        }
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (selectedPaymentOption == 'Credit Card' ||
+                        selectedPaymentOption == 'Debit Card') {
+                      if (cardHolderController.text.isEmpty ||
+                          cardNumberController.text.isEmpty ||
+                          expiryDateController.text.isEmpty ||
+                          cvvController.text.isEmpty) {
+                        showSnackbar("Please fill all card details.");
+                        return;
                       }
+                    }
 
-                      // Simulate successful payment
-                      Future.delayed(const Duration(seconds: 2), () {
-                        showSnackbar("Payment Successful!");
-                      });
+                    // Prepare payment data
+                    final paymentData = {
+                      "paymentOption": selectedPaymentOption,
+                      "cardHolder": cardHolderController.text,
+                      "cardNumber": cardNumberController.text,
+                      "expiryDate": expiryDateController.text,
+                      "cvv": cvvController.text,
+                    };
+
+                    // Trigger payment using Cubit
+                    context.read<PaymentCubit>().processPayment(paymentData);
+                  },
+                  child: BlocBuilder<PaymentCubit, PaymentState>(
+                    builder: (context, state) {
+                      if (state is PaymentLoading) {
+                        return const CircularProgressIndicator();
+                      }
+                      return const Text("Confirm Payment");
                     },
-                    child: const Text("Confirm Payment"),
-                  )),
+                  ),
+                ),
+              )
             ],
           ),
         ),

@@ -40,7 +40,9 @@ class DashboardState extends Equatable {
         ),
         BlocProvider<UserProfileCubit>.value(
           value: serviceLocator<UserProfileCubit>(),
-          child: const UserProfileScreen(),
+          child: const UserProfileScreen(
+            userId: 'userId',
+          ),
         ),
       ],
     );
