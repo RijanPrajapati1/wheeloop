@@ -55,7 +55,7 @@ class AuthRemoteDataSource implements IAuthDataSource {
       );
 
       if (response.statusCode == 200) {
-        final str = response.data['token'];
+        final str = response.data['userId'];
         return str;
       } else {
         throw Exception(response.statusMessage);

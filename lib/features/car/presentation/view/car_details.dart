@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:wheeloop/features/booking/presentation/view/booking_screen.dart';
 
 class CarDetailScreen extends StatelessWidget {
@@ -17,7 +16,7 @@ class CarDetailScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ✅ Car Image (Ensures full image visibility)
+              // Car Image (Ensures full image visibility)
               ClipRRect(
                 borderRadius: BorderRadius.circular(16),
                 child: Container(
@@ -25,8 +24,9 @@ class CarDetailScreen extends StatelessWidget {
                   width: double.infinity,
                   color: Colors.grey[200], // Placeholder background
                   child: Image.network(
-                    car['image']!.replaceFirst("localhost", "10.0.2.2"),
-                    fit: BoxFit.contain, // ✅ Ensures full image is visible
+                    car['image']!.replaceFirst("localhost",
+                        "192.168.16.211"), // Replace with your laptop's IP address
+                    fit: BoxFit.contain,
                     errorBuilder: (context, error, stackTrace) =>
                         const Icon(Icons.error, size: 50, color: Colors.red),
                   ),
@@ -34,7 +34,7 @@ class CarDetailScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
 
-              // ✅ Car Name
+              // Car Name
               Text(
                 car['name']!,
                 style:
@@ -42,18 +42,7 @@ class CarDetailScreen extends StatelessWidget {
               ),
               const SizedBox(height: 8),
 
-              // ✅ Star Rating
-              RatingBarIndicator(
-                rating: (car['rating'] ?? 0).toDouble(),
-                itemBuilder: (context, _) =>
-                    const Icon(Icons.star, color: Colors.amber),
-                itemCount: 5,
-                itemSize: 20,
-                direction: Axis.horizontal,
-              ),
-              const SizedBox(height: 16),
-
-              // ✅ Price
+              // Price
               Text(
                 "Rs. ${car['price']}/day",
                 style: const TextStyle(
@@ -63,24 +52,34 @@ class CarDetailScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
 
-              // ✅ Type
+              // Type
               Text("Type: ${car['type']}",
                   style: const TextStyle(fontSize: 16)),
               const SizedBox(height: 8),
 
-              // ✅ Transmission
+              // Transmission
               Text("Transmission: ${car['transmission']}",
                   style: const TextStyle(fontSize: 16)),
               const SizedBox(height: 8),
 
-              // ✅ Description
+              // Description
               Text(
                 "Description: ${car['description'] ?? 'No details available'}",
                 style: const TextStyle(fontSize: 16),
               ),
               const SizedBox(height: 32),
 
-              // ✅ Book Now Button (Navigates to BookingScreen)
+              // Reviews Section
+              const Text(
+                'Reviews:',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              _buildReviewsList(),
+
+              const SizedBox(height: 32),
+
+              // Book Now Button (Navigates to BookingScreen)
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -99,6 +98,40 @@ class CarDetailScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildReviewsList() {
+    // Replace this with your logic to fetch reviews from your backend or API
+    final reviews = [
+      {'user': 'Anonymous', 'reviewText': 'Great car, very comfortable.'},
+      {
+        'user': 'Anonymous',
+        'reviewText': 'Amazing experience! Highly recommended.'
+      },
+    ];
+
+    // If no reviews are found, show the message 'No reviews yet.'
+    if (reviews.isEmpty) {
+      return const Text('No reviews yet.');
+    }
+
+    // Display the reviews in a list
+    return ListView.builder(
+      shrinkWrap: true,
+      physics:
+          const NeverScrollableScrollPhysics(), // Prevent scrolling inside this list
+      itemCount: reviews.length,
+      itemBuilder: (context, index) {
+        final review = reviews[index];
+
+        return ListTile(
+          title: Text(review['user'] ??
+              'Anonymous'), // Provide fallback for null 'user'
+          subtitle: Text(review['reviewText'] ??
+              'No review text available'), // Provide fallback for null 'reviewText'
+        );
+      },
     );
   }
 }

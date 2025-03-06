@@ -32,12 +32,16 @@ import 'package:wheeloop/app/service_locator/service_locator.dart';
 import 'package:wheeloop/core/app_theme/app_theme.dart';
 import 'package:wheeloop/features/auth/presentation/view_model/login/login_screen_cubit.dart';
 import 'package:wheeloop/features/auth/presentation/view_model/signup/signup_screen_cubit.dart';
+import 'package:wheeloop/features/booked_car/presentation/view_model/booked_car_cubit.dart';
+import 'package:wheeloop/features/booking/presentation/view_model/booking_cubit.dart';
 import 'package:wheeloop/features/car/presentation/view_model/car_screen_cubit.dart';
 import 'package:wheeloop/features/dashboard/presentation/view_model/dashboard_cubit.dart';
 import 'package:wheeloop/features/dashboard/presentation/view_model/home_cubit.dart';
+import 'package:wheeloop/features/notification/presentation/view_model/notification_screen_cubit.dart';
 import 'package:wheeloop/features/on_boarding_screen/presentation/view_model/on_boarding_screen_cubit.dart';
 import 'package:wheeloop/features/splash/presentation/view/splash_screen.dart';
 import 'package:wheeloop/features/splash/presentation/view_model/splash_screen_cubit.dart';
+import 'package:wheeloop/features/user_profile/view_model/user_profile_cubit.dart';
 
 class RouteGenerator extends StatelessWidget {
   const RouteGenerator({super.key});
@@ -52,7 +56,11 @@ class RouteGenerator extends StatelessWidget {
         BlocProvider(create: (_) => serviceLocator<SignUpScreenCubit>()),
         BlocProvider(create: (_) => serviceLocator<CarCubit>()),
         BlocProvider(create: (_) => serviceLocator<HomeCubit>()),
+        BlocProvider(create: (_) => serviceLocator<BookedCarCubit>()),
+        BlocProvider(create: (_) => serviceLocator<NotificationCubit>()),
+        BlocProvider(create: (_) => serviceLocator<UserProfileCubit>()),
         BlocProvider(create: (_) => serviceLocator<DashboardCubit>()),
+        BlocProvider(create: (_) => serviceLocator<BookingCubit>()),
       ],
       child: MaterialApp(
         theme: getApplicationTheme(),

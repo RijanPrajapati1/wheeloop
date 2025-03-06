@@ -32,7 +32,7 @@ class LoginScreenCubit extends Cubit<LoginState> {
           ),
         );
       },
-      (token) {
+      (userId) {
         emit(state.copyWith(isLoading: false, isSuccess: true));
         Navigator.pushReplacement(
           context,

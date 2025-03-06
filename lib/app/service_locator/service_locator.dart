@@ -13,10 +13,16 @@ import 'package:wheeloop/features/auth/domain/use_case/register_usecase.dart';
 import 'package:wheeloop/features/auth/domain/use_case/upload_image_usecase.dart';
 import 'package:wheeloop/features/auth/presentation/view_model/login/login_screen_cubit.dart';
 import 'package:wheeloop/features/auth/presentation/view_model/signup/signup_screen_cubit.dart';
+import 'package:wheeloop/features/booked_car/presentation/view_model/booked_car_cubit.dart';
+import 'package:wheeloop/features/booking/data/repository/booking_repo.dart';
+import 'package:wheeloop/features/booking/domain/use_case/booking_usecae.dart';
+import 'package:wheeloop/features/booking/presentation/view_model/booking_cubit.dart';
 import 'package:wheeloop/features/dashboard/presentation/view_model/dashboard_cubit.dart';
 import 'package:wheeloop/features/dashboard/presentation/view_model/home_cubit.dart';
+import 'package:wheeloop/features/notification/presentation/view_model/notification_screen_cubit.dart';
 import 'package:wheeloop/features/on_boarding_screen/presentation/view_model/on_boarding_screen_cubit.dart';
 import 'package:wheeloop/features/splash/presentation/view_model/splash_screen_cubit.dart';
+import 'package:wheeloop/features/user_profile/view_model/user_profile_cubit.dart';
 
 final serviceLocator = GetIt.instance;
 
@@ -29,7 +35,11 @@ Future<void> initDependencies() async {
   await _initSplashScreenDependencies();
   await _initOnBoardingScreenDependencies();
   await _initHomeDependencies();
+  await _initBookingCarDependencies();
+  await _initNotificationDependencies();
+  await _initUserProfileDependencies();
   await _initDashboardDependencies();
+  await _initBookingDependencies();
 }
 
 Future<void> _initSharedPreferences() async {
@@ -143,8 +153,43 @@ _initHomeDependencies() async {
   );
 }
 
+_initNotificationDependencies() async {
+  serviceLocator.registerFactory<NotificationCubit>(
+    () => NotificationCubit(serviceLocator<Dio>()), // Pass Dio instance here
+  );
+}
+
+_initBookingCarDependencies() async {
+  serviceLocator.registerFactory<BookedCarCubit>(
+    () => BookedCarCubit(serviceLocator<Dio>()), // Pass Dio instance here
+  );
+}
+
+_initUserProfileDependencies() async {
+  serviceLocator.registerFactory<UserProfileCubit>(
+    () => UserProfileCubit(serviceLocator<Dio>()), // Pass Dio instance here
+  );
+}
+
 _initDashboardDependencies() async {
   serviceLocator.registerFactory<DashboardCubit>(
     () => DashboardCubit(),
+  );
+}
+
+_initBookingDependencies() async {
+  // Register Booking Repository
+  serviceLocator.registerLazySingleton<BookingRepository>(
+    () => BookingRepository(),
+  );
+
+  // Register HandleBookingUseCase
+  serviceLocator.registerLazySingleton<HandleBookingUseCase>(
+    () => HandleBookingUseCase(serviceLocator<BookingRepository>()),
+  );
+
+  // Register Booking Cubit with the correct use case
+  serviceLocator.registerFactory<BookingCubit>(
+    () => BookingCubit(serviceLocator<HandleBookingUseCase>()),
   );
 }

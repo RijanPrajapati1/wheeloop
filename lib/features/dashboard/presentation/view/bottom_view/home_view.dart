@@ -48,55 +48,19 @@ class HomeScreen extends StatelessWidget {
                         const CircleAvatar(
                           radius: 26,
                           backgroundImage: AssetImage(
-                              'assets/images/car_splash.png'), // Profile image
+                              'assets/images/user.jpg'), // Profile image
                         ),
                       ],
                     ),
                   ),
                   const SizedBox(height: 20),
-                  // Search Section
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            onChanged: (value) {
-                              context.read<HomeCubit>().updateSearchText(
-                                  value); // Update search text in cubit
-                            },
-                            decoration: InputDecoration(
-                              prefixIcon: const Icon(Icons.search),
-                              hintText: "Search Your Favorite Vehicle",
-                              filled: true,
-                              fillColor: Colors.grey[120],
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide.none,
-                              ),
-                              labelText: state.searchText.isEmpty
-                                  ? "Search Your Favorite Vehicle"
-                                  : state.searchText,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        IconButton(
-                          onPressed: () {
-                            // Implement filtering logic if needed
-                          },
-                          icon: const Icon(Icons.filter_list),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
+
                   // Top Brands Section
                   // const SizedBox(height: 10),
                   // const BrandScreen(),
-                  const SizedBox(height: 20),
+
                   // All Cars Section
-                  const SizedBox(height: 10),
+
                   const CarScreen(),
                 ],
               ),

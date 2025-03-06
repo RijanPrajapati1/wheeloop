@@ -1,20 +1,20 @@
-import 'dart:convert';
+import 'package:wheeloop/features/car/data/data_source/car_datasource.dart';
+import 'package:wheeloop/features/car/data/repository/car_repo.dart';
+import 'package:wheeloop/features/car/domain/entity/car_entity.dart';
 
-import 'package:http/http.dart' as http;
-import 'package:wheeloop/features/car/data/model/car_model.dart';
+class CarRepositoryImpl implements CarRepository {
+  final CarRemoteDataSource remoteDataSource;
 
-class CarRepository {
-  // ✅ Correct API link to fetch cars
-  final String apiUrl = "http://10.0.2.2:3001/api/car/findAll";
+  CarRepositoryImpl({required this.remoteDataSource});
 
-  Future<List<CarModel>> getAllCars() async {
-    final response = await http.get(Uri.parse(apiUrl));
+  @override
+  Future<List<Car>> getCars() async {
+    return await remoteDataSource.fetchCars();
+  }
 
-    if (response.statusCode == 200) {
-      List<dynamic> data = json.decode(response.body);
-      return data.map((json) => CarModel.fromJson(json)).toList();
-    } else {
-      throw Exception("Failed to fetch cars");
-    }
+  @override
+  Future<Car> getCarDetails(String id) {
+    // TODO: implement getCarDetails
+    throw UnimplementedError();
   }
 }

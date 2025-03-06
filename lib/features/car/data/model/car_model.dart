@@ -1,43 +1,18 @@
-class CarModel {
-  final String id;
-  final String name;
-  final String image;
-  final String type;
-  final String price;
-  final String transmission;
-  final String description;
+import 'package:json_annotation/json_annotation.dart';
+import 'package:wheeloop/features/car/domain/entity/car_entity.dart';
 
+part 'car_model.g.dart';
+
+@JsonSerializable()
+class CarModel extends Car {
   CarModel({
-    required this.id,
-    required this.name,
-    required this.image,
-    required this.type,
-    required this.price,
-    required this.transmission,
-    required this.description,
+    required super.id,
+    required super.name,
+    required super.price,
+    required super.imageUrl,
   });
 
-  factory CarModel.fromJson(Map<String, dynamic> json) {
-    return CarModel(
-      id: json['id'] ?? '',
-      name: json['name'] ?? 'Unknown',
-      image: json['image'] ?? '',
-      type: json['type'] ?? 'Unknown',
-      price: json['price']?.toString() ?? 'N/A',
-      transmission: json['transmission'] ?? 'Unknown',
-      description: json['description'] ?? 'No description available',
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'image': image,
-      'type': type,
-      'price': price,
-      'transmission': transmission,
-      'description': description,
-    };
-  }
+  factory CarModel.fromJson(Map<String, dynamic> json) =>
+      _$CarModelFromJson(json);
+  Map<String, dynamic> toJson() => _$CarModelToJson(this);
 }

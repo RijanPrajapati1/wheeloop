@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:wheeloop/features/car/presentation/view/car_details.dart';
 
 class CarScreen extends StatefulWidget {
@@ -14,12 +13,15 @@ class CarScreen extends StatefulWidget {
 
 class _CarScreenState extends State<CarScreen> {
   final Dio _dio = Dio();
-  final String baseUrl = "http://10.0.2.2:3001/api/car/findAll";
+  final String baseUrl = "http://192.168.16.211:3001/api/car/findAll";
 
   List<Map<String, dynamic>> cars = [];
+  List<Map<String, dynamic>> filteredCars = [];
   List<Map<String, dynamic>> suggestedCars = [];
   bool isLoading = true;
   String errorMessage = '';
+
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -27,7 +29,7 @@ class _CarScreenState extends State<CarScreen> {
     fetchCars();
   }
 
-  // ✅ Fetch Cars from Backend
+  // Fetch Cars from Backend
   Future<void> fetchCars() async {
     try {
       final response = await _dio.get(baseUrl);
@@ -37,6 +39,7 @@ class _CarScreenState extends State<CarScreen> {
 
         setState(() {
           cars = fetchedCars;
+          filteredCars = fetchedCars;
           suggestedCars = _getRandomSuggestions(fetchedCars);
           isLoading = false;
         });
@@ -51,13 +54,28 @@ class _CarScreenState extends State<CarScreen> {
     }
   }
 
-  // ✅ Get 3 random suggested cars
+  // Get 3 random suggested cars
   List<Map<String, dynamic>> _getRandomSuggestions(
       List<Map<String, dynamic>> allCars) {
     final random = Random();
     List<Map<String, dynamic>> shuffledCars = List.from(allCars)
       ..shuffle(random);
     return shuffledCars.take(3).toList(); // Pick first 3 random cars
+  }
+
+  // Search function to filter cars based on input
+  void _filterCars(String query) {
+    setState(() {
+      if (query.isEmpty) {
+        filteredCars = cars; // Show all cars if search bar is empty
+      } else {
+        filteredCars = cars
+            .where((car) => car['name']
+                .toLowerCase()
+                .contains(query.toLowerCase())) // Match car name
+            .toList();
+      }
+    });
   }
 
   @override
@@ -70,6 +88,27 @@ class _CarScreenState extends State<CarScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const SizedBox(height: 10),
+
+                    // Search Bar
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: TextField(
+                        controller: _searchController,
+                        onChanged:
+                            _filterCars, // Call _filterCars on user input
+                        decoration: InputDecoration(
+                          hintText: "Search cars...",
+                          prefixIcon: const Icon(Icons.search),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+
+                    // ✅ "All Cars" Section
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Row(
@@ -102,15 +141,14 @@ class _CarScreenState extends State<CarScreen> {
                     ),
                     const SizedBox(height: 10),
 
-                    // ✅ "All Cars" Section
+                    // Show filtered cars instead of all cars
                     SizedBox(
                       height: 280,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: cars.length,
+                        itemCount: filteredCars.length, // Display filtered cars
                         itemBuilder: (context, index) {
-                          final car = cars[index];
-
+                          final car = filteredCars[index];
                           return _buildCarCard(context, car);
                         },
                       ),
@@ -118,7 +156,7 @@ class _CarScreenState extends State<CarScreen> {
 
                     const SizedBox(height: 20),
 
-                    // ✅ "Suggested for You" Section
+                    // "Suggested for You" Section
                     if (suggestedCars.isNotEmpty) ...[
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16),
@@ -146,7 +184,7 @@ class _CarScreenState extends State<CarScreen> {
               );
   }
 
-  // ✅ Car Card Widget (Images Properly Fitted)
+  //  Car Card Widget (Images Properly Fitted)
   Widget _buildCarCard(BuildContext context, Map<String, dynamic> car) {
     return GestureDetector(
       onTap: () {
@@ -179,12 +217,12 @@ class _CarScreenState extends State<CarScreen> {
                 borderRadius:
                     const BorderRadius.vertical(top: Radius.circular(16)),
                 child: Container(
-                  height: 140, // ✅ Reduced height slightly
+                  height: 140, //Reduced height slightly
                   width: double.infinity,
                   color: Colors.grey[200], // Placeholder background
                   child: Image.network(
-                    car['image']!.replaceFirst("localhost", "10.0.2.2"),
-                    fit: BoxFit.contain, // ✅ Ensures full image is visible
+                    car['image']!.replaceFirst("localhost", "192.168.16.211"),
+                    fit: BoxFit.contain, // Ensures full image is visible
                     errorBuilder: (context, error, stackTrace) =>
                         const Icon(Icons.error, size: 50, color: Colors.red),
                   ),
@@ -204,13 +242,13 @@ class _CarScreenState extends State<CarScreen> {
                       ),
                     ),
                     const SizedBox(height: 6),
-                    RatingBarIndicator(
-                      rating: (car['rating'] ?? 0).toDouble(),
-                      itemBuilder: (context, _) =>
-                          const Icon(Icons.star, color: Colors.amber),
-                      itemCount: 5,
-                      itemSize: 18,
-                      direction: Axis.horizontal,
+                    Text(
+                      car['type']!,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text(
@@ -266,7 +304,7 @@ class CarListScreen extends StatelessWidget {
                     borderRadius: const BorderRadius.horizontal(
                         left: Radius.circular(12)),
                     child: Image.network(
-                      car['image']!.replaceFirst("localhost", "10.0.2.2"),
+                      car['image']!.replaceFirst("localhost", "192.168.16.211"),
                       height: 100,
                       width: 120,
                       fit: BoxFit.cover,
